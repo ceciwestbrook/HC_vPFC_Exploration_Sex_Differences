@@ -1,0 +1,47 @@
+# Data — never publish. Study 2 imaging is access-controlled via NDA.
+*.Rdata
+*.rds
+*.dat
+*.csv
+*.csv.gz
+*.gz
+*.nii
+*.nii.gz
+
+# Model output. NB .inp files are model specifications, i.e. code, and are
+# tracked; .dat and .out are data and output, and are not.
+*.out
+*.gh5
+mixed_by_output/
+validate_mixed_by_clock_HC_interaction/
+
+# Logs
+slurm-*.out
+slurm-*.err
+*.log
+rerun_logs/
+
+# Figures — regenerate from the scripts rather than committing binaries
+*.pdf
+*.png
+*.emf
+*.tiff
+*.eps
+
+# Local and editor
+.Rhistory
+.RData
+.Rproj.user/
+.DS_Store
+*~
+
+# Superseded scripts kept locally for provenance, not published
+archive/
+
+# Exclusion lists name individual participants; they live with the data
+exclusions.csv
+id_remap.csv
+
+# ...but the templates must be tracked: they document the expected format
+!exclusions_TEMPLATE.csv
+!id_remap_TEMPLATE.csv

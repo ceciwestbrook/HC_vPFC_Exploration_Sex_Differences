@@ -1,0 +1,36 @@
+DATA: FILE = "Study1_HC_vmPFC_clock_sens_AH_forMplus_taa.dat";
+VARIABLE: 
+NAMES = id run trial run_trial HC_region rt_csv rt_lag vmPFC_decon_CTR
+     vmPFC_decon_DMN vmPFC_decon_LIM HCwithin_CTR HCwithin_DMN HCwithin_LIM age
+     female sex; 
+MISSING=.;
+USEVARIABLES ARE id vmpfc_decon_CTR HCwithin_CTR run;
+CLUSTER = id;
+
+ANALYSIS:
+TYPE = TWOLEVEL RANDOM;
+ESTIMATOR= BAYES;
+PROCESSORS = 4;
+CHAINS = 4;
+KOLMOGOROV = 100;
+BITERATIONS = 30000;
+
+
+MODEL:
+%WITHIN%	
+rs | vmpfc_decon_CTR on HCwithin_CTR; 
+vmpfc_decon_CTR on run;
+
+%BETWEEN%
+vmpfc_decon_CTR on HCwithin_CTR run; 
+
+HCwithin_CTR;
+
+rs; 
+[rs];
+
+
+OUTPUT: TECH1 TECH8 STANDARDIZED;
+SAVEDATA:
+FILE=Study1_AH_CTR_sens_rs_slopes.dat;
+SAVE=FSCORES (50);

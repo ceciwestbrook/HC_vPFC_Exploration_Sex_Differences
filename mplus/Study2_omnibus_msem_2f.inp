@@ -1,0 +1,76 @@
+DATA: FILE = "Study2_HC_vmPFC_clock_OMNIBUS_forMplus_taa.dat";
+  VARIABLE:
+  NAMES = id run trial rt_csv rt_lag age sex AH_CTR_rs AH_DMN_rs AH_LIM_rs
+       PH_CTR_rs PH_DMN_rs PH_LIM_rs;
+  MISSING=.;
+  USEVARIABLES ARE id sex run rt_csv rt_lag AH_CTR_rs AH_DMN_rs AH_LIM_rs
+       PH_CTR_rs PH_DMN_rs PH_LIM_rs;
+  CLUSTER = id;
+  BETWEEN = sex AH_CTR_rs AH_DMN_rs AH_LIM_rs
+       PH_CTR_rs PH_DMN_rs PH_LIM_rs;
+  WITHIN = run;
+
+  ANALYSIS:
+  TYPE = TWOLEVEL RANDOM;
+  ESTIMATOR= BAYES;
+  PROCESSORS = 4;
+  CHAINS = 4;
+  KOLMOGOROV = 100;
+  !BITERATIONS = 30000;
+  FBITERATIONS = 20000;
+
+  MODEL:
+  %WITHIN%
+  !within person random slope
+  rs_rtout | rt_csv ON rt_lag;
+  !within person fixed effect
+  rt_csv ON run;
+
+  %BETWEEN%
+  ! rt on all btwn predictors
+  AH BY AH_CTR_rs AH_DMN_rs AH_LIM_rs;
+  PH BY PH_CTR_rs PH_DMN_rs PH_LIM_rs;
+
+  !within-network residual correlations
+  PH_LIM_RS WITH AH_LIM_RS;
+  PH_CTR_RS WITH AH_CTR_RS;
+  PH_DMN_RS WITH AH_DMN_RS;
+
+  rt_csv ON rt_lag AH PH sex;
+
+  ! rs_rt out is y
+  ! y on m, x, covariates
+  rs_rtout ON AH (ba);
+  rs_rtout ON PH (bp); !m to y
+  rs_rtout ON sex (c); !direct effect
+
+  ! mediator on x and covariates
+  AH ON sex (aa); !x to m
+  PH ON sex (ap);
+  AH ON rt_lag; !covariates
+  PH ON rt_lag;
+
+  rt_lag ON ;
+
+  !estimate variances
+  rs_rtout;
+  rt_csv rt_lag AH PH sex;
+
+  !intercorrelations
+  rt_lag WITH sex;
+  !AH_CTR_rs-PH_LIM_rs WITH AH_CTR_rs-PH_LIM_rs;
+
+  !estimate mean of random slope
+  !this is main effect of rt_lag w/in
+  [rs_rtout];
+
+  MODEL CONSTRAINT:
+  NEW(ah_ind ph_ind);
+  ah_ind = aa*ba;
+  ph_ind = ap*bp;
+
+  !SAVEDATA:
+  !FILE=bsocial_omnibus_output.dat;
+  !SAVE=FSCORES (50);
+
+  OUTPUT: TECH1 TECH8;

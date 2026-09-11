@@ -1,0 +1,5 @@
+study,id,run,reason
+study2,100001,,age_over_50
+study2,100002,,age_over_50
+study2,100003,1,preprocessing_failure
+study1,200001,,no_usable_imaging

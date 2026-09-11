@@ -1,0 +1,29 @@
+TITLE: Study2 AH-LIM random slope, group-adjusted;
+DATA: FILE = "Study2_vmPFC_clock_AH_groupadj.dat";
+VARIABLE:
+NAMES = id run trial rt_csv rt_lag vmPFC_decon_CTR vmPFC_decon_DMN vmPFC_decon_LIM
+        HCwithin_CTR HCwithin_DMN HCwithin_LIM age sex_num bpd_num;
+USEVARIABLES = vmPFC_decon_LIM HCwithin_LIM run bpd_num;
+MISSING = .;
+CLUSTER = id;
+BETWEEN = bpd_num;
+ANALYSIS:
+TYPE = TWOLEVEL RANDOM;
+ESTIMATOR = BAYES;
+PROCESSORS = 4;
+CHAINS = 4;
+BITERATIONS = 30000;
+MODEL:
+%WITHIN%
+rs | vmPFC_decon_LIM ON HCwithin_LIM;
+vmPFC_decon_LIM ON run;
+%BETWEEN%
+vmPFC_decon_LIM ON HCwithin_LIM run;
+HCwithin_LIM;
+rs ON bpd_num;
+rs;
+[rs];
+OUTPUT: TECH1 TECH8 STANDARDIZED;
+SAVEDATA:
+FILE = Study2_AH_LIM_rs_slopes_groupadj.dat;
+SAVE = FSCORES (50);
