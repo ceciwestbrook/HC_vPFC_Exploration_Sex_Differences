@@ -45,3 +45,4 @@ id_remap.csv
 # ...but the templates must be tracked: they document the expected format
 !exclusions_TEMPLATE.csv
 !id_remap_TEMPLATE.csv
+MANIFEST.md
