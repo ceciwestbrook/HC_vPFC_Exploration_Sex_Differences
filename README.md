@@ -144,13 +144,4 @@ subject to participant consent and IRB approval.
 
 ## Citation
 
-If you use this code, please cite the paper. [Add the Zenodo DOI for this
-repository once minted — enable the repository in your Zenodo account, then cut
-a release.]
-
-## License
-
-[Choose one. MIT is the usual choice for analysis code and is permissive;
-BSD-3-Clause and Apache-2.0 are common alternatives. A license is required for
-the code to be legally reusable — without one, default copyright applies and
-others cannot legally use it.]
+This code is associated with a manuscript currently under review.
